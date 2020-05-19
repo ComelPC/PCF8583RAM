@@ -1,4 +1,4 @@
-// SRAM PCF8583, 256 x 8 (2K) 240 for user
+// SRAM PCF8583, 256 x 8  240 for user
 // 
 //---------------------------------------------------------------------------------------------------------
 
@@ -11,40 +11,38 @@
 #include <PCF8583RAM.h>
 PCF8583RAM sram(0x50);                             // 0x50 = A0(GND)
 
-char ch;
+char ZN;
 //---------------------------------------------------------------------------------------------------------
 void setup() {
   Serial.begin(9600);
-
   sram.init();
-
 }
 //---------------------------------------------------------------------------------------------------------
 void loop() {
   Serial.println("SRAM PCF8583:");
   Serial.println("r - Read");
+  Serial.println("0 - Write (write 0x00) data");
   Serial.println("b - Blank (write 0xFF)");
   Serial.println("x - Write random data");
-  Serial.println("0 - Write (write 0xFF) data");
   Serial.println();
 
   while (1) {
     if (Serial.available() > 0) {
-      ch = Serial.read();
+      ZN = Serial.read();
 
-      if (ch == 'r')                              // read
+      if (ZN == 'r')                              // read
         sram_read();
 
-      if (ch == 'b') {                            // blank and read
+      if (ZN == 'b') {                            // blank and read
         sram_blank();
         sram_read();
       }
-       if (ch == '0') {                            // write 00 and read
+       if (ZN == '0') {                            // write 00 and read
         sram_00();
         sram_read();
       }
 
-      if (ch == 'x') {                            // write random data and read
+      if (ZN == 'x') {                            // write random data and read
         sram_write_random_data();
         sram_read();
       }
